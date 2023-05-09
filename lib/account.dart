@@ -12,5 +12,16 @@ class Account {
     _balance += transaction.value;
   }
 
+  @override
+  String toString() {
+    String output = "Account: $name\n";
+    output += "Balance: \$$_balance\n";
+    output += "Transactions:\n";
+    for (Transaction transaction in _transactions) {
+      output += "\t${transaction.name}: \$${transaction.value}\n";
+    }
+    return output;
+  }
+
   get balance => _balance;
 }
