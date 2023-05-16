@@ -3,7 +3,7 @@ import 'transaction.dart';
 class Account {
   double _balance;
   String name;
-  List<Transaction> _transactions = List.empty(growable: true);
+  final List<Transaction> _transactions = List.empty(growable: true);
 
   Account(this._balance, this.name);
 
