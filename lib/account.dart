@@ -23,5 +23,14 @@ class Account {
     return output;
   }
 
+  Map<String, Object?> toMap() {
+    Map<String, Object> map = {};
+    map["name"] = name;
+    map["balance"] = _balance;
+    //map["transactions"] = _transactions;
+    return map;
+  }
+
   get balance => _balance;
+  get transactions => _transactions;
 }

@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:budget/account.dart';
 import 'package:budget/transaction.dart';
+import 'package:budget/database.dart';
 
 void main() {
   runApp(const MyApp());
@@ -46,14 +49,30 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: SingleChildScrollView(
-        child: Column(children: accountWidgets),
+        child: Row(children: [
+          TextButton(
+            child: const Text("Save"),
+            onPressed: () => saveDB(accounts),
+          ),
+          Column(children: accountWidgets)
+        ]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => setState(() {
-          accounts.add(Account(DateTime.now().millisecondsSinceEpoch.toDouble(),
-              accounts.length.toString()));
-        }),
+        onPressed: () => setState(() => accounts.add(generateAccount())),
       ),
     );
+  }
+
+  Account generateAccount() {
+    Account dummyAccount =
+        Account(Random().nextDouble() * 500, accounts.length.toString());
+    for (int i = 0; i < Random().nextInt(6); i++) {
+      dummyAccount.addTransaction(generateTransaction());
+    }
+    return dummyAccount;
+  }
+
+  Transaction generateTransaction() {
+    return Transaction(Random().nextDouble() * 500, "Dummy Transaction");
   }
 }
