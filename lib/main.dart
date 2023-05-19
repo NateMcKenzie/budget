@@ -37,6 +37,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Account> accounts = List.empty(growable: true);
+  DatabaseWrapper db = DatabaseWrapper();
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +51,22 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SingleChildScrollView(
         child: Row(children: [
-          TextButton(
-            child: const Text("Save"),
-            onPressed: () => saveDB(accounts),
+          Column(
+            children: [
+              TextButton(
+                child: const Text("Save"),
+                onPressed: () => db.saveDB(accounts),
+              ),
+              TextButton(
+                child: const Text("Load"),
+                onPressed: () async {
+                  List<Account> loadedAccounts = await db.loadDB();
+                  setState(() {
+                    accounts = loadedAccounts;
+                  });
+                },
+              )
+            ],
           ),
           Column(children: accountWidgets)
         ]),
@@ -63,9 +77,21 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  final List<String> accountNames = [
+    "Savings",
+    "Checking",
+    "Oranges",
+    "Investments",
+    "Sports Bets",
+    "Jewelry",
+    "Stocks",
+    "Classic Auto",
+    "Baseball Cards"
+  ];
+
   Account generateAccount() {
-    Account dummyAccount =
-        Account(Random().nextDouble() * 500, accounts.length.toString());
+    Account dummyAccount = Account(Random().nextDouble() * 500,
+        accountNames[(accounts.length) % accountNames.length]);
     for (int i = 0; i < Random().nextInt(6); i++) {
       dummyAccount.addTransaction(generateTransaction());
     }
